@@ -25,7 +25,7 @@ public class MecDrivetrain extends DrivetrainBase {
     public MecModule[] mods = { new MecModule(0), new MecModule(1), new MecModule(2), new MecModule(3) };
 
     public MecDrivetrain() {
-        super();
+        
 
         imu = new pidgion(1); // test
 
@@ -35,21 +35,7 @@ public class MecDrivetrain extends DrivetrainBase {
 
         odometry = new Odometry(kinematics, getYaw(), getModsPos(), new Pose2d(0.0, 0.0, new Rotation2d()));
 
-        AutoBuilder.configureHolonomic(
-                this::getPose2d, // Robot pose supplier
-                this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
-                this::getChassisSpeed, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-                this::setChassisSpeed, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-                new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your
-                                                 // Constants class
-                        new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-                        new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
-                        maxAngularVelocity, // Max module speed, in m/s
-                        drivetrainRadius, // Drive base radius in meters. Distance from robot center to furthest module.
-                        new ReplanningConfig() // Default path replanning config. See the API for the options here
-                ),
-                this // Reference to this subsystem to set requirements
-        );
+        super();
     }
 
     public void setChassisSpeed(ChassisSpeeds speeds) {
