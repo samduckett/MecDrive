@@ -5,6 +5,7 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -27,6 +28,8 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     drivetrain.setDefaultCommand(new TeleopDrivetrain(drivetrain));
+
+    NamedCommands.registerCommand("zeroGyro", new InstantCommand(drivetrain::zeroGyro));
 
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);

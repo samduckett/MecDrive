@@ -13,6 +13,7 @@ import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.lib.util.gyrotypes.*;;
 
 public class MecDrivetrain extends DrivetrainBase {
     // Creating my kinematics object using the wheel locations.
@@ -26,7 +27,8 @@ public class MecDrivetrain extends DrivetrainBase {
     public MecDrivetrain() {
         super();
 
-        imu = imu.new pidgion(1); // test
+        imu = new pidgion(1); // test
+
         kinematics = new MecanumDriveKinematics(
                 wheelLocations[0], wheelLocations[1],
                 wheelLocations[2], wheelLocations[3]);
