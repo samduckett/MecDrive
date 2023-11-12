@@ -1,0 +1,54 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.88,
+      "y": 4.42
+    },
+    "rotation": 180.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "zeroGyro"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Grab Pice 1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Place Pice 8"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Grab Pice 2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Place Pice 5"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Balance Spot 5"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null
+}

@@ -1,10 +1,5 @@
 package frc.robot.subsystems;
 
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
-import com.pathplanner.lib.util.ReplanningConfig;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -27,29 +22,13 @@ public class MecDrivetrain extends DrivetrainBase {
     public MecDrivetrain() {
         super();
 
-        imu = new pidgion(1); // test
+        imu = new Pigeon2(1); // test
 
         kinematics = new MecanumDriveKinematics(
                 wheelLocations[0], wheelLocations[1],
                 wheelLocations[2], wheelLocations[3]);
 
-        odometry = new Odometry(kinematics, getYaw(), getModsPos(), new Pose2d(0.0, 0.0, new Rotation2d()));
-
-        AutoBuilder.configureHolonomic(
-                this::getPose2d, // Robot pose supplier
-                this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
-                this::getChassisSpeed, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-                this::setChassisSpeed, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-                new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your
-                                                 // Constants class
-                        new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-                        new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
-                        maxAngularVelocity, // Max module speed, in m/s
-                        drivetrainRadius, // Drive base radius in meters. Distance from robot center to furthest module.
-                        new ReplanningConfig() // Default path replanning config. See the API for the options here
-                ),
-                this // Reference to this subsystem to set requirements
-        );
+        odometry = new Odometry(kinematics, imu.getYaw(), getModsPos(), new Pose2d(0.0, 0.0, new Rotation2d()));
     }
 
     public void setChassisSpeed(ChassisSpeeds speeds) {
@@ -75,9 +54,11 @@ public class MecDrivetrain extends DrivetrainBase {
 
     @Override
     public void periodic() {
-        odometry.update(getYaw(), getModsPos());
+        odometry.update(imu.getYaw(), getModsPos());
 
-        SmartDashboard.putNumber("Pitch", Math.abs(MathUtil.inputModulus(getPitch().getDegrees(), -180, 180)));
+        SmartDashboard.putNumber("Pitch", Math.abs(MathUtil.inputModulus(imu.getPitch().getDegrees(), -180, 180)));
+        SmartDashboard.putNumber("Yaw", Math.abs(MathUtil.inputModulus(imu.getYaw().getDegrees(), -180, 180)));
+        SmartDashboard.putNumber("Roll", Math.abs(MathUtil.inputModulus(imu.getRoll().getDegrees(), -180, 180)));
 
         for (MecModule mod : mods) {
             SmartDashboard.putNumber("Mod" + mod.moduleNumber + " Cancoder", mod.getPosition());

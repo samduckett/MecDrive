@@ -5,16 +5,16 @@ import com.ctre.phoenix.sensors.PigeonIMU;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.lib.util.IMU;
 
-public class pidgion extends IMU {
+public class Pigeon2 extends IMU {
     public PigeonIMU gyro;
     public boolean invertGyro;
 
-    public pidgion(int canID, boolean invertGyro) {
+    public Pigeon2(int canID, boolean invertGyro) {
         invertGyro = this.invertGyro;
         gyro = new PigeonIMU(canID);
     }
 
-    public pidgion(int canID) {
+    public Pigeon2(int canID) {
         invertGyro = false;
         gyro = new PigeonIMU(canID);
     }

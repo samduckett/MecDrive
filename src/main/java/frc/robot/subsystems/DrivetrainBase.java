@@ -6,7 +6,6 @@ import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
@@ -57,7 +56,7 @@ public abstract class DrivetrainBase extends SubsystemBase {
         ChassisSpeeds speeds = new ChassisSpeeds(translation.getX(), translation.getY(), rotation);
 
         if (fieldRelative)
-            speeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, getYaw());
+            speeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, imu.getYaw());
         setChassisSpeed(speeds);
     }
 
@@ -78,28 +77,12 @@ public abstract class DrivetrainBase extends SubsystemBase {
         imu.zeroGyro();
     }
 
-    public void offsetGyro(double angle) {
-        imu.offsetGyro(angle);
-    }
-
-    public Rotation2d getYaw() {
-        return imu.getYaw();
-    }
-
-    public Rotation2d getPitch() {
-        return imu.getPitch();
-    }
-
-    public Rotation2d getRoll() {
-        return imu.getRoll();
-    }
-
     // odometry-------------------------------------------
     public Pose2d getPose2d() {
         return odometry.get();
     }
 
     public void resetOdometry(Pose2d pose) {
-        odometry.reset(getYaw(), getModsPos(), pose);
+        odometry.reset(imu.getYaw(), getModsPos(), pose);
     }
 }

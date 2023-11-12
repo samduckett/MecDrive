@@ -6,6 +6,7 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -20,8 +21,8 @@ import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
 public class Robot extends TimedRobot {
-  private Command m_autonomousCommand;
-  private SendableChooser<Command> autoChooser;
+  private Command autonomousCommand;
+  private SendableChooser<Command> autoChooser = new SendableChooser<>();
 
   private final DrivetrainBase drivetrain = new MecDrivetrain();
 
@@ -29,13 +30,21 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     drivetrain.setDefaultCommand(new TeleopDrivetrain(drivetrain));
 
-    NamedCommands.registerCommand("zeroGyro", new InstantCommand(drivetrain::zeroGyro));
-
-    autoChooser = AutoBuilder.buildAutoChooser();
+    registerCommand();
+    // autoChooser = AutoBuilder.buildAutoChooser();
+    autoChooser.setDefaultOption("Zero Gyro", new InstantCommand(drivetrain::zeroGyro));
+    // autoChooser.addOption("TestAuto1", new PathPlannerAuto("New Auto"));
     SmartDashboard.putData("Auto Chooser", autoChooser);
 
     Controls.driver.A.onTrue(new InstantCommand(drivetrain::zeroGyro));
     // Controls.operator.B.whileTrue(new InstantCommand());
+  }
+
+  public void registerCommand() {
+    NamedCommands.registerCommand("zeroGyro", new InstantCommand(drivetrain::zeroGyro));
+    NamedCommands.registerCommand("PlacePiceHigh", new InstantCommand(drivetrain::zeroGyro));
+    NamedCommands.registerCommand("PlacePiceMid", new InstantCommand(drivetrain::zeroGyro));
+    NamedCommands.registerCommand("PlacePiceLow", new InstantCommand(drivetrain::zeroGyro));
   }
 
   @Override
@@ -52,12 +61,12 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void disabledExit() {
-  }
-
-  @Override
   public void autonomousInit() {
-    autoChooser.getSelected().schedule();
+    autonomousCommand = autoChooser.getSelected();
+    if (autonomousCommand != null)
+      autonomousCommand.schedule();
+    else
+      System.err.print("fix your code");
   }
 
   @Override
@@ -65,22 +74,14 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void autonomousExit() {
-  }
-
-  @Override
   public void teleopInit() {
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
-    }
+    if (autonomousCommand != null)
+      autonomousCommand.cancel();
   }
 
   @Override
   public void teleopPeriodic() {
-  }
 
-  @Override
-  public void teleopExit() {
   }
 
   @Override
@@ -93,6 +94,11 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void testExit() {
+  public void simulationInit() {
   }
+
+  @Override
+  public void simulationPeriodic() {
+  }
+
 }
