@@ -4,9 +4,9 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
+//import com.pathplanner.lib.auto.AutoBuilder;
+//import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -31,12 +31,16 @@ public class Robot extends TimedRobot {
     drivetrain.setDefaultCommand(new TeleopDrivetrain(drivetrain));
 
     registerCommand();
+    testing test = new testing();
+
+    Controls.driver.A.onTrue(new InstantCommand(drivetrain::zeroGyro));
+    Controls.driver.B.whileTrue(test);
+
     // autoChooser = AutoBuilder.buildAutoChooser();
     autoChooser.setDefaultOption("Zero Gyro", new InstantCommand(drivetrain::zeroGyro));
     // autoChooser.addOption("TestAuto1", new PathPlannerAuto("New Auto"));
     SmartDashboard.putData("Auto Chooser", autoChooser);
-
-    Controls.driver.A.onTrue(new InstantCommand(drivetrain::zeroGyro));
+    SmartDashboard.putData("Commands", CommandScheduler.getInstance());
     // Controls.operator.B.whileTrue(new InstantCommand());
   }
 
@@ -50,6 +54,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
+    // System.out.println("111");
   }
 
   @Override
@@ -86,7 +91,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testInit() {
-    CommandScheduler.getInstance().cancelAll();
+    // CommandScheduler.getInstance().cancelAll();
   }
 
   @Override
@@ -99,6 +104,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void simulationPeriodic() {
+    // CommandScheduler.getInstance().run();
+
   }
 
 }

@@ -1,8 +1,12 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.TalonFXSimCollection;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+// import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 //import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 // import edu.wpi.first.math.geometry.Rotation2d;
@@ -19,37 +23,43 @@ import frc.lib.math.Conversions;
 public class MecModule {
 
     private TalonFX driveMotor;
-
+    private TalonFXSimCollection driveMotorSim;
     public int moduleNumber;
 
     public MecModule(int moduleNumber) {
-        moduleNumber = this.moduleNumber;
+        this.moduleNumber = moduleNumber;
 
-        driveMotor = new WPI_TalonFX(1);
+        driveMotor = new WPI_TalonFX(moduleNumber);
+        driveMotorSim = driveMotor.getSimCollection();
+
     }
 
     /** curetnt percent output. [-5,5] */
     public void driveMoter(double Velocity) {
+        SmartDashboard.putNumber("Mod" + moduleNumber + " Set Velocity", Velocity);
+
         driveMotor.set(ControlMode.PercentOutput, Velocity / 5);
-        ;
+        driveMotorSim.setSupplyCurrent(Velocity / 5 * 12);
+
+        // Conversions.MPSToFalcon(kWheelRadiusInches, 8, 10.14)
+        // m_driveSim.update(0.02);
+
+        // m_leftDriveSim.setQuadratureRawPosition(distanceToNativeUnits(m_driveSim.getLeftPositionMeters()));
     }
 
-    public double getPosition() {
+    public double getPos() {
         return Conversions.falconToDegrees(driveMotor.getSelectedSensorPosition(),
                 10.41);
     }
 
-    public double getVelocity() {
+    public double getVel() {
         return Conversions.falconToMPS(driveMotor.getSelectedSensorVelocity(),
                 8, 10.41);
     }
 
-    public double getPos() {
-        return getPosition();
-    }
-
-    public double getVel() {
-        return getVelocity();
+    @Override
+    public String toString() {
+        return (moduleNumber + " Velocity: " + getVel());
     }
 }
 // public void setDesiredState(MecanumDriveWheelSpeeds desiredState, boolean

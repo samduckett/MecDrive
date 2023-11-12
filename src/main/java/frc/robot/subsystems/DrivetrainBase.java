@@ -79,7 +79,7 @@ public abstract class DrivetrainBase extends SubsystemBase {
 
     // odometry-------------------------------------------
     public Pose2d getPose2d() {
-        return odometry.get();
+        return odometry.getPoseMeters();
     }
 
     public void resetOdometry(Pose2d pose) {

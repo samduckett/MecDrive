@@ -27,7 +27,7 @@ public class Odometry {
         odometry.update(yaw, pos);
     }
 
-    public Pose2d get() {
+    public Pose2d getPoseMeters() {
         return odometry.getPoseMeters();
     }
 }
