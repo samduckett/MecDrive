@@ -20,7 +20,6 @@ public class MecDrivetrain extends DrivetrainBase {
     public MecModule[] mods = { new MecModule(0), new MecModule(1), new MecModule(2), new MecModule(3) };
 
     public MecDrivetrain() {
-        super();
 
         imu = new Pigeon2(1); // test
 
